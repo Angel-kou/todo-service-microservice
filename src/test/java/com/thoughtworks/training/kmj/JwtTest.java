@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.junit.Test;
 
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,7 +14,6 @@ import static org.junit.Assert.assertThat;
 
 public class JwtTest {
 
-    private Map<String,Object> claims;
 
     @Test
     public void generateJwt() {
@@ -21,7 +21,7 @@ public class JwtTest {
         claims.put("name","hahha");
         claims.put("role","dev");
 
-        byte[] secretKey = "kitty".getBytes();
+        byte[] secretKey = "kitty".getBytes(Charset.defaultCharset());
 
         //generate
         String token = Jwts.builder()
