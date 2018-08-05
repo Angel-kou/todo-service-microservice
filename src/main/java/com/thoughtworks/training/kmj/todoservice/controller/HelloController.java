@@ -18,7 +18,7 @@ public class HelloController {
     @Autowired
     private HelloService helloService;
 
-    @RequestMapping(method = RequestMethod.GET,path = "/hello/{name}")
+    @RequestMapping(method =RequestMethod.GET,path = "/hello/{name}")
     public String hello(@PathVariable("name") String name,
                         Model model) {
 //        Person person = Person.builder()
