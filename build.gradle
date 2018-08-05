@@ -14,6 +14,7 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'checkstyle'
+apply plugin: 'findbugs'
 
 group = 'com.thoughtworks.training.kmj'
 version = '0.0.1-SNAPSHOT'
@@ -47,6 +48,14 @@ tasks.withType(Checkstyle) {
 	reports {
 		xml.enabled false
 		html.enabled true
-		html.stylesheet resources.text.fromFile('config/xsl/checkstyle-custom.xsl')
+//		html.stylesheet resources.text.fromFile('config/xsl/checkstyle-custom.xsl')
+	}
+}
+
+tasks.withType(FindBugs) {
+	reports {
+		xml.enabled false
+		html.enabled true
+//		html.stylesheet resources.text.fromFile('config/xsl/findbugs-custom.xsl')
 	}
 }

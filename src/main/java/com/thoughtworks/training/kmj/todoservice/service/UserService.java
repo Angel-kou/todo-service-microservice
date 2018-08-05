@@ -53,14 +53,14 @@ public class UserService {
     }
 
     public ResponseEntity login(User user) {
-        if(verify(user.getName(),user.getPassword())){
+        if (verify(user.getName(),user.getPassword())) {
             int id = findIdByName(user.getName());
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(JwtAuthentication.generateToken(id));
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Constants.USERNAME_OR_PASSWORD_ERROR);
     }
 
-    public User findUser(Integer id){
+    public User findUser(Integer id) {
         return userRepository.findOne(id);
     }
 

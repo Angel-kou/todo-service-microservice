@@ -1,8 +1,9 @@
 package com.thoughtworks.training.kmj.todoservice.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 
-import java.util.Arrays;
 
 @Data
 @AllArgsConstructor

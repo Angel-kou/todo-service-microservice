@@ -61,6 +61,6 @@ public class ToDoService {
     public ToDo find(Integer id) throws NotFoundException {
          return
                  Optional.ofNullable(toDoRepository.findOne(id))
-                         .orElseThrow(()->new NotFoundException("not found"));
+                         .orElseThrow(() -> new NotFoundException("not found"));
     }
 }

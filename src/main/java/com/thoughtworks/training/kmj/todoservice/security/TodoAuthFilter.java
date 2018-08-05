@@ -8,7 +8,6 @@ import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -20,7 +19,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Collection;
 
 
 @Component
@@ -42,7 +40,7 @@ public class TodoAuthFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
         String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if(!StringUtils.isEmpty(token)){
+        if (!StringUtils.isEmpty(token)) {
             Claims claims = JwtAuthentication.validateToken(token);
             Integer userId = JwtAuthentication.getUserId(claims);
 
@@ -61,7 +59,7 @@ public class TodoAuthFilter extends OncePerRequestFilter {
     public static Integer getUserId() {
         Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
         Object principal = authentication.getPrincipal();
-        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+//        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         return (Integer) principal;
     }
 

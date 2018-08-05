@@ -8,7 +8,14 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.List;
 
 
@@ -18,7 +25,7 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "todo")
-@SQLDelete(sql="update todo set deleted=true where id = ?")
+@SQLDelete(sql = "update todo set deleted=true where id = ?")
 @Where(clause = "deleted = false")
 public class ToDo {
 
