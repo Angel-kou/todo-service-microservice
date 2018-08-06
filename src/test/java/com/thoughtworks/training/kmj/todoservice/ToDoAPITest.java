@@ -3,8 +3,6 @@ package com.thoughtworks.training.kmj.todoservice;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thoughtworks.training.kmj.todoservice.model.ToDo;
-import com.thoughtworks.training.kmj.todoservice.model.User;
-import com.thoughtworks.training.kmj.todoservice.repository.UserRepository;
 import com.thoughtworks.training.kmj.todoservice.service.ToDoService;
 import com.thoughtworks.training.kmj.todoservice.utils.JwtAuthentication;
 import org.junit.Before;

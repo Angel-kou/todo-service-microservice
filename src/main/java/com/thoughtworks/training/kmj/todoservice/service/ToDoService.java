@@ -1,5 +1,6 @@
 package com.thoughtworks.training.kmj.todoservice.service;
 
+import com.thoughtworks.training.kmj.todoservice.dto.User;
 import com.thoughtworks.training.kmj.todoservice.model.ToDo;
 import com.thoughtworks.training.kmj.todoservice.repository.ToDoRepository;
 import com.thoughtworks.training.kmj.todoservice.security.TodoAuthFilter;
@@ -22,12 +23,10 @@ public class ToDoService {
     @Autowired
     private ToDoRepository toDoRepository;
 
-    @Autowired
-    private UserService userService;
 
      public List<ToDo> getList() {
-         Integer userId = TodoAuthFilter.getUserId();
-         List<ToDo> list = toDoRepository.findAllByUserIdIs(userId);
+         User user = TodoAuthFilter.getUser();
+         List<ToDo> list = toDoRepository.findAllByUserIdIs(user.getId());
         return list;
     }
 
@@ -35,8 +34,8 @@ public class ToDoService {
 
     public ResponseEntity create(ToDo todo) {
 //        todo.getTasks().forEach(task -> task.setToDo(todo));
-        Integer userId = TodoAuthFilter.getUserId();
-        todo.setUser(userService.findUser(userId));
+        User user = TodoAuthFilter.getUser();
+        todo.setUserId(user.getId());
         toDoRepository.save(todo);
         return ResponseEntity.status(HttpStatus.CREATED).body(Constants.CREATE_SUCCESS);
     }

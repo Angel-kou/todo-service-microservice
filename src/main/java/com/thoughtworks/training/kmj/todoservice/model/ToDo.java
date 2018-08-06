@@ -13,7 +13,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.List;
@@ -44,13 +43,12 @@ public class ToDo {
     @JoinColumn(name = "todo_id")
     private List<Task> tasks;
 
-//    @JsonIgnore
-//    private int userId;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
     @JsonIgnore
-    private User user;
+    private int userId;
 
+//    @ManyToOne
+//    @JoinColumn(name = "user_id")
+////    @JsonIgnore
+//    private User user;
 
 }
