@@ -1,4 +1,4 @@
-package com.thoughtworks.training.kmj.todoservice;
+package com.thoughtworks.training.kmj.userservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;

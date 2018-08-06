@@ -1,9 +1,10 @@
-package com.thoughtworks.training.kmj.todoservice.controller;
+package com.thoughtworks.training.kmj.userservice.controller;
 
 
-import com.thoughtworks.training.kmj.todoservice.model.User;
-import com.thoughtworks.training.kmj.todoservice.service.UserService;
+import com.thoughtworks.training.kmj.userservice.model.User;
+import com.thoughtworks.training.kmj.userservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,6 +33,15 @@ public class UserAPI {
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody User user)  {
         return userService.login(user);
+    }
+
+    @PostMapping("/verification")
+    public ResponseEntity verification(@RequestBody String token)  {
+        try {
+            return ResponseEntity.ok(userService.findUser(token));
+        }catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        }
     }
 
 

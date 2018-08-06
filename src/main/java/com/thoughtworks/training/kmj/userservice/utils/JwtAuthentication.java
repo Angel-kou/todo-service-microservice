@@ -1,4 +1,4 @@
-package com.thoughtworks.training.kmj.todoservice.utils;
+package com.thoughtworks.training.kmj.userservice.utils;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

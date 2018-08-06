@@ -1,4 +1,4 @@
-package com.thoughtworks.training.kmj.todoservice;
+package com.thoughtworks.training.kmj.userservice;
 
 import org.junit.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

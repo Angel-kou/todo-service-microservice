@@ -1,9 +1,10 @@
-package com.thoughtworks.training.kmj.todoservice.service;
+package com.thoughtworks.training.kmj.userservice.service;
 
-import com.thoughtworks.training.kmj.todoservice.model.User;
-import com.thoughtworks.training.kmj.todoservice.repository.UserRepository;
-import com.thoughtworks.training.kmj.todoservice.utils.Constants;
-import com.thoughtworks.training.kmj.todoservice.utils.JwtAuthentication;
+import com.thoughtworks.training.kmj.userservice.model.User;
+import com.thoughtworks.training.kmj.userservice.repository.UserRepository;
+import com.thoughtworks.training.kmj.userservice.utils.Constants;
+import com.thoughtworks.training.kmj.userservice.utils.JwtAuthentication;
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -61,6 +62,12 @@ public class UserService {
     }
 
     public User findUser(Integer id) {
+        return userRepository.findOne(id);
+    }
+
+    public User findUser(String token) {
+        Claims claims = JwtAuthentication.validateToken(token);
+        Integer id = JwtAuthentication.getUserId(claims);
         return userRepository.findOne(id);
     }
 

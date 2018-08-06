@@ -1,4 +1,4 @@
-package com.thoughtworks.training.kmj.todoservice.security;
+package com.thoughtworks.training.kmj.userservice.security;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +20,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private UnauthorizedEntryPoint unauthorizedEntryPoint;
 
     @Autowired
-    private TodoAuthFilter todoAuthFilter;
-
+    private UserAuthFilter userAuthFilter;
 
 
     @Override
@@ -29,10 +28,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().authorizeRequests()
-                .antMatchers(HttpMethod.POST,"/users","/login").permitAll()
+                .antMatchers(HttpMethod.POST,"/users","/login","/verification").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .addFilterBefore(todoAuthFilter,
+                .addFilterBefore(userAuthFilter,
                         UsernamePasswordAuthenticationFilter.class)
                     .exceptionHandling().authenticationEntryPoint(unauthorizedEntryPoint);
     }

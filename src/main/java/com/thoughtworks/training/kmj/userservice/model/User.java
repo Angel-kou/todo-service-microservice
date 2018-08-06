@@ -1,4 +1,4 @@
-package com.thoughtworks.training.kmj.todoservice.model;
+package com.thoughtworks.training.kmj.userservice.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

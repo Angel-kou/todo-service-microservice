@@ -1,9 +1,9 @@
-package com.thoughtworks.training.kmj.todoservice.security;
+package com.thoughtworks.training.kmj.userservice.security;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.net.HttpHeaders;
-import com.thoughtworks.training.kmj.todoservice.service.UserService;
-import com.thoughtworks.training.kmj.todoservice.utils.JwtAuthentication;
+import com.thoughtworks.training.kmj.userservice.service.UserService;
+import com.thoughtworks.training.kmj.userservice.utils.JwtAuthentication;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,25 +22,23 @@ import java.io.IOException;
 
 
 @Component
-public class TodoAuthFilter extends OncePerRequestFilter {
+public class UserAuthFilter extends OncePerRequestFilter {
 
     public static final String KMJ = "kmj";
 
     @Autowired
     private UserService userService;
 
-//    @Override
-//    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-//        System.out.println("path:  "+request.getContextPath());
-//        return request.getContextPath().startsWith("/login");
-//    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
         String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+        System.out.println("token----"+token);
         if (!StringUtils.isEmpty(token)) {
+            System.out.println("token--111-");
+
             Claims claims = JwtAuthentication.validateToken(token);
             Integer userId = JwtAuthentication.getUserId(claims);
 

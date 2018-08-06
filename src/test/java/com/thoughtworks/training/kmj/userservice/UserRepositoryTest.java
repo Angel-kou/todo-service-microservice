@@ -1,8 +1,8 @@
-package com.thoughtworks.training.kmj.todoservice;
+package com.thoughtworks.training.kmj.userservice;
 
 
-import com.thoughtworks.training.kmj.todoservice.model.User;
-import com.thoughtworks.training.kmj.todoservice.repository.UserRepository;
+import com.thoughtworks.training.kmj.userservice.model.User;
+import com.thoughtworks.training.kmj.userservice.repository.UserRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
