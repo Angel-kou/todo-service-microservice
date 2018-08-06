@@ -72,7 +72,7 @@ public class ToDoAPITest {
                                 user.getId(), null, Collections.emptyList()
                         ))))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(4))
+                .andExpect(jsonPath("$.length()").value(3))
                 .andExpect(jsonPath("$[0].id").value(todoId))
                 .andExpect(jsonPath("$[0].content").value("todo1"));
     }
@@ -87,7 +87,7 @@ public class ToDoAPITest {
                         .header(HttpHeaders.AUTHORIZATION, token)
         )
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(4))
+                .andExpect(jsonPath("$.length()").value(3))
                 .andExpect(jsonPath("$[0].id").value(todoId))
                 .andExpect(jsonPath("$[0].content").value("todo1"));
     }
@@ -101,7 +101,7 @@ public class ToDoAPITest {
         ));
 
         List<ToDo> list = toDoService.getList();
-        assertThat(list.size(), is(4));
+        assertThat(list.size(), is(3));
         assertThat(list.get(0).getId(), is(todoId));
         assertThat(list.get(0).getContent(), is("todo1"));
     }
