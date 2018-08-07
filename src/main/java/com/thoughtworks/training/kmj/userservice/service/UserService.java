@@ -3,8 +3,6 @@ package com.thoughtworks.training.kmj.userservice.service;
 import com.thoughtworks.training.kmj.userservice.model.User;
 import com.thoughtworks.training.kmj.userservice.repository.UserRepository;
 import com.thoughtworks.training.kmj.userservice.utils.Constants;
-import com.thoughtworks.training.kmj.userservice.utils.JwtAuthentication;
-import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,32 +51,29 @@ public class UserService {
         return userRepository.findIdByName(username).getId();
     }
 
-    public ResponseEntity login(User user) {
-        System.out.println("name" + user.getName() + "         ,pas   " + user.getPassword());
-        if (verify(user.getName(), user.getPassword())) {
-            int id = findIdByName(user.getName());
-            System.out.println("id   " + id);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(JwtAuthentication.generateToken(id));
-        }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Constants.USERNAME_OR_PASSWORD_ERROR);
-    }
-
-
 //    public ResponseEntity login(User user) {
 //        System.out.println("name" + user.getName() + "         ,pas   " + user.getPassword());
 //        if (verify(user.getName(), user.getPassword())) {
-//            return ResponseEntity.status(HttpStatus.ACCEPTED).body(findIdByName(user.getName()));
+//            int id = findIdByName(user.getName());
+//            System.out.println("id   " + id);
+//            return ResponseEntity.status(HttpStatus.ACCEPTED).body(JwtAuthentication.generateToken(id));
 //        }
 //        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Constants.USERNAME_OR_PASSWORD_ERROR);
 //    }
 
-    public User findUser(Integer id) {
-        return userRepository.findOne(id);
+
+    public User login(User user) {
+        User user1 = new User();
+        if (verify(user.getName(), user.getPassword())) {
+            user1.setId(findIdByName(user.getName()));
+            return user1;
+        }
+        return user1;
     }
 
-    public User findUser(String token) {
-        Claims claims = JwtAuthentication.validateToken(token);
-        Integer id = JwtAuthentication.getUserId(claims);
+    public User findUser(int id) {
+//        Claims claims = JwtAuthentication.validateToken(token);
+//        Integer id = JwtAuthentication.getUserId(claims);
         return userRepository.findOne(id);
     }
 }

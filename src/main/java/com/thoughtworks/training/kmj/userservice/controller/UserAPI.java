@@ -33,14 +33,14 @@ public class UserAPI {
 
     @PostMapping(value = "/login",
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity login(@RequestBody User user)  {
+    public User login(@RequestBody User user)  {
         return userService.login(user);
     }
 
     @PostMapping("/verification")
-    public ResponseEntity verification(@RequestBody String token)  {
+    public ResponseEntity verification(@RequestBody Integer id)  {
         try {
-            return ResponseEntity.ok(userService.findUser(token));
+            return ResponseEntity.ok(userService.findUser(id));
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
