@@ -5,6 +5,7 @@ import com.thoughtworks.training.kmj.userservice.model.User;
 import com.thoughtworks.training.kmj.userservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,7 +31,8 @@ public class UserAPI {
        return userService.find();
     }
 
-    @PostMapping("/login")
+    @PostMapping(value = "/login",
+            consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity login(@RequestBody User user)  {
         return userService.login(user);
     }
@@ -39,10 +41,18 @@ public class UserAPI {
     public ResponseEntity verification(@RequestBody String token)  {
         try {
             return ResponseEntity.ok(userService.findUser(token));
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
     }
+
+
+
+
+
+
+
+
 
 
 }

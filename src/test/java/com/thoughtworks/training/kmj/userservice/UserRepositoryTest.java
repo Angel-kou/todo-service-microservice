@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.Instant;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
@@ -25,9 +26,11 @@ public class UserRepositoryTest {
     @Test
     public void shouldReturnUserWithName() {
 
-        userRepository.save(new User(1,"user1","123"));
-        Optional<User> user = userRepository.findOneByName("user1");
+        System.out.println("now "+ Instant.now());
+
+        userRepository.save(new User(4,"user4","123",null));
+        Optional<User> user = userRepository.findOneByName("user4");
         assertTrue(user.isPresent());
-        assertThat(user.get().getName(),is("user1"));
+        assertThat(user.get().getName(),is("user4"));
     }
 }

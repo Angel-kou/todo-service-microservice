@@ -18,7 +18,6 @@ import java.util.Optional;
 public class UserService {
 
 
-
     @Autowired
     UserRepository userRepository;
 
@@ -31,6 +30,7 @@ public class UserService {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String encodedPassword = encoder.encode("password");
         user.setPassword(encodedPassword);
+//        user.setCreated_date(Instant.now());
         userRepository.save(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(Constants.CREATE_SUCCESS);
 
@@ -54,12 +54,23 @@ public class UserService {
     }
 
     public ResponseEntity login(User user) {
-        if (verify(user.getName(),user.getPassword())) {
+        System.out.println("name" + user.getName() + "         ,pas   " + user.getPassword());
+        if (verify(user.getName(), user.getPassword())) {
             int id = findIdByName(user.getName());
+            System.out.println("id   " + id);
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(JwtAuthentication.generateToken(id));
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Constants.USERNAME_OR_PASSWORD_ERROR);
     }
+
+
+//    public ResponseEntity login(User user) {
+//        System.out.println("name" + user.getName() + "         ,pas   " + user.getPassword());
+//        if (verify(user.getName(), user.getPassword())) {
+//            return ResponseEntity.status(HttpStatus.ACCEPTED).body(findIdByName(user.getName()));
+//        }
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Constants.USERNAME_OR_PASSWORD_ERROR);
+//    }
 
     public User findUser(Integer id) {
         return userRepository.findOne(id);
@@ -70,6 +81,4 @@ public class UserService {
         Integer id = JwtAuthentication.getUserId(claims);
         return userRepository.findOne(id);
     }
-
-
 }

@@ -2,9 +2,8 @@ package com.thoughtworks.training.kmj.userservice.security;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.net.HttpHeaders;
+import com.thoughtworks.training.kmj.userservice.model.User;
 import com.thoughtworks.training.kmj.userservice.service.UserService;
-import com.thoughtworks.training.kmj.userservice.utils.JwtAuthentication;
-import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -35,33 +34,30 @@ public class UserAuthFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
         String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-        System.out.println("token----"+token);
-        if (!StringUtils.isEmpty(token)) {
-            System.out.println("token--111-");
+        System.out.println("token --user----" + token);
+        if(!StringUtils.isEmpty(token)) {
+            Integer userId = Integer.valueOf(token.split(":")[0]);
+            String username = token.split(":")[1];
 
-            Claims claims = JwtAuthentication.validateToken(token);
-            Integer userId = JwtAuthentication.getUserId(claims);
-
+            User user = new User(userId, username, "", null);
             SecurityContextHolder.getContext().setAuthentication(
-                    new UsernamePasswordAuthenticationToken(userId,null,
+                    new UsernamePasswordAuthenticationToken(user, null,
                             ImmutableList.of(new SimpleGrantedAuthority("dev"),
                                     new SimpleGrantedAuthority("play")))
             );
-
         }
+
         filterChain.doFilter(request,response);
 
     }
 
 
     public static Integer getUserId() {
-        Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Object principal = authentication.getPrincipal();
 //        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         return (Integer) principal;
     }
-
-
 
 
 }
