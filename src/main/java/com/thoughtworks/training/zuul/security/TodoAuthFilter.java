@@ -1,12 +1,15 @@
 package com.thoughtworks.training.zuul.security;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import com.google.common.net.HttpHeaders;
 import com.netflix.zuul.context.RequestContext;
 import com.thoughtworks.training.zuul.client.UserClient;
 import com.thoughtworks.training.zuul.dto.User;
+import com.thoughtworks.training.zuul.utils.HttpServletRequestReader;
+import com.thoughtworks.training.zuul.utils.JwtAuthentication;
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,8 +32,6 @@ public class TodoAuthFilter extends OncePerRequestFilter {
     @Autowired
     UserClient userClient;
 
-    private ResponseEntity responseEntity;
-
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -38,10 +39,12 @@ public class TodoAuthFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
         String token = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-        System.out.println("kmj--------------"+token);
         if (!StringUtils.isEmpty(token)) {
 
-            User user = userClient.verifyTokenIsValid(token);
+            Claims claims = JwtAuthentication.validateToken(token);
+            Integer id = JwtAuthentication.getUserId(claims);
+
+            User user = userClient.verifyTokenIsValid(id);
 
             SecurityContextHolder.getContext().setAuthentication(
                     new UsernamePasswordAuthenticationToken(user,null,
@@ -52,26 +55,28 @@ public class TodoAuthFilter extends OncePerRequestFilter {
             RequestContext.getCurrentContext()
                     .addZuulRequestHeader(HttpHeaders.AUTHORIZATION,user.getId()+":"+user.getName());
         }
-//        else {
-//            String json = HttpServletRequestReader.ReadAsChars(request);
-//            ObjectMapper objectMapper = new ObjectMapper();
-//            User user = objectMapper.readValue(json, User.class);
-//            System.out.println(user);
-//            responseEntity = userClient.verifyUserIsExist(user);
-//
-//            System.out.println(responseEntity.getStatusCode());
-//            System.out.println(HttpStatus.ACCEPTED);
-//
-//            String backToken = "";
-//            if (responseEntity.getStatusCode() == HttpStatus.ACCEPTED) {
-//                backToken = JwtAuthentication.generateToken((Integer) responseEntity.getBody());
-//                System.out.println("back    " + backToken);
-//            }
-//
-//            response.getOutputStream().print(backToken);
-//            return ;
-//
-//        }
+        else {
+
+            if(request.getServletPath().equals("/login")) {
+                String json = HttpServletRequestReader.ReadAsChars(request);
+                ObjectMapper objectMapper = new ObjectMapper();
+                User user = objectMapper.readValue(json, User.class);
+
+                User temp  = userClient.verifyUserIsExist(user);
+
+                String backToken = "";
+                if(temp.getId() != 0) {
+
+                    backToken = JwtAuthentication.generateToken(temp.getId());
+                    response.getOutputStream().print(backToken);
+
+                }else{
+                    response.getOutputStream().print("user is not exist");
+                }
+
+                return;
+            }
+        }
 
         filterChain.doFilter(request,response);
 

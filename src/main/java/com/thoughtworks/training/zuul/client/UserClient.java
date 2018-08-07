@@ -2,7 +2,6 @@ package com.thoughtworks.training.zuul.client;
 
 import com.thoughtworks.training.zuul.dto.User;
 import org.springframework.cloud.netflix.feign.FeignClient;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -10,10 +9,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface UserClient {
 
     @PostMapping("/verification")
-    User verifyTokenIsValid(@RequestBody String token);
+    User verifyTokenIsValid(@RequestBody Integer id);
 
 
     @PostMapping("/login")
-    ResponseEntity verifyUserIsExist(@RequestBody User user);
+    User verifyUserIsExist(@RequestBody User user);
 
 }
