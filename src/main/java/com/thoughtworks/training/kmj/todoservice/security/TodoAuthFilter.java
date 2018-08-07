@@ -38,7 +38,6 @@ public class TodoAuthFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
 
         String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-        System.out.println("token --todo---" + token);
         if(!StringUtils.isEmpty(token)) {
             Integer userId = Integer.valueOf(token.split(":")[0]);
             String username = token.split(":")[1];
