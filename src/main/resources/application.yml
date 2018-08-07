@@ -1,0 +1,34 @@
+server:
+  port: 9001
+  context-path: /api
+zuul:
+  debug:
+     request: true
+  sensitive-headers:
+  routes:
+    user:
+      path: /users/**
+      url: http://127.0.0.1:8081
+      strip-prefix: false
+
+    login:
+      path: /login/**
+      url: http://127.0.0.1:8081
+      strip-prefix: false
+
+    todos:
+      path: /todos/**
+      url: http://127.0.0.1:8082
+      strip-prefix: false
+
+    logging:
+       level:
+         org:
+           springframework:
+             cloud:
+               netflix: TRACE
+
+
+
+
+
