@@ -4,8 +4,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.net.HttpHeaders;
 import com.thoughtworks.training.kmj.todoservice.client.UserClient;
 import com.thoughtworks.training.kmj.todoservice.dto.User;
-import com.thoughtworks.training.kmj.todoservice.utils.JwtAuthentication;
-import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -34,37 +32,25 @@ public class TodoAuthFilter extends OncePerRequestFilter {
     @Autowired
     UserClient userClient;
 
-
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
+
         String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (!StringUtils.isEmpty(token)) {
-            Claims claims = JwtAuthentication.validateToken(token);
-            Integer userId = JwtAuthentication.getUserId(claims);
+        System.out.println("token --todo---" + token);
+        if(!StringUtils.isEmpty(token)) {
+            Integer userId = Integer.valueOf(token.split(":")[0]);
+            String username = token.split(":")[1];
 
-//            User user = new User(userId,"yaya","123456");
-
-            User user = userClient.verifyTokenIsValid(token);
-
+            User user = new User(userId, username, "");
             SecurityContextHolder.getContext().setAuthentication(
-                    new UsernamePasswordAuthenticationToken(user,null,
+                    new UsernamePasswordAuthenticationToken(user, null,
                             ImmutableList.of(new SimpleGrantedAuthority("dev"),
                                     new SimpleGrantedAuthority("play")))
             );
-
-//            RestTemplate restTemplate = new RestTemplateBuilder().build();
-//            ResponseEntity<User> responseEntity = restTemplate.postForEntity("http://localhost:8081/api/verification",
-//                    token,User.class);
-//
-//            SecurityContextHolder.getContext().setAuthentication(
-//                    new UsernamePasswordAuthenticationToken(responseEntity.getBody(),null,
-//                            ImmutableList.of(new SimpleGrantedAuthority("dev"),
-//                                    new SimpleGrantedAuthority("play")))
-//            );
-
         }
+
         filterChain.doFilter(request,response);
 
     }
