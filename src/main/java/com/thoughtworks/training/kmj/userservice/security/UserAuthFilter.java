@@ -36,8 +36,9 @@ public class UserAuthFilter extends OncePerRequestFilter {
         String token = request.getHeader(HttpHeaders.AUTHORIZATION);
         System.out.println("token --user----" + token);
         if(!StringUtils.isEmpty(token)) {
-            Integer userId = Integer.valueOf(token.split(":")[0]);
-            String username = token.split(":")[1];
+            String[] splitToken = token.split(":");
+            Integer userId = Integer.valueOf(splitToken[0]);
+            String username = splitToken[1];
 
             User user = new User(userId, username, "", null);
             SecurityContextHolder.getContext().setAuthentication(
