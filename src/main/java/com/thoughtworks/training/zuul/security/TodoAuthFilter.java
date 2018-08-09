@@ -57,12 +57,15 @@ public class TodoAuthFilter extends OncePerRequestFilter {
         }
         else {
 
-            if(request.getServletPath().equals("/login")) {
+            System.out.println("------request.getServletPath()-------" + request.getServletPath());
+            if(request.getServletPath().equals("/api/login")) {
+                System.out.println("-------------kmj");
                 String json = HttpServletRequestReader.ReadAsChars(request);
                 ObjectMapper objectMapper = new ObjectMapper();
                 User user = objectMapper.readValue(json, User.class);
 
                 User temp  = userClient.verifyUserIsExist(user);
+
 
                 String backToken = "";
                 if(temp.getId() != 0) {

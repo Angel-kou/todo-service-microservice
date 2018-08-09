@@ -1,24 +1,46 @@
+#spring:
+#  application:
+#    name: zuul
+#  cloud:
+#    consul:
+#      host: consul
+#      port: 8500
+#      discovery:
+#        instance-id: ${spring.application.name}:${random.int}
+
 server:
-  port: 9001
-  context-path: /api
+  port: 8080
+
+user-service:
+  ribbon:
+    listOfServers: localhost:8081
+
+todo-service:
+  ribbon:
+    listOfServers: localhost:8082
+
 zuul:
   debug:
      request: true
   sensitive-headers:
+  prefix: /api
   routes:
     user:
       path: /users/**
-      url: http://127.0.0.1:8081
+      serviceId: user-service
       strip-prefix: false
-
+    verification:
+      path: /verification
+      serviceId: user-service
+      strip-prefix: false
     login:
       path: /login/**
-      url: http://127.0.0.1:8081
+      serviceId: user-service
       strip-prefix: false
 
     todos:
       path: /todos/**
-      url: http://127.0.0.1:8082
+      serviceId: todo-service
       strip-prefix: false
 
     logging:
@@ -27,6 +49,7 @@ zuul:
            springframework:
              cloud:
                netflix: TRACE
+
 
 
 
