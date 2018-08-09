@@ -32,6 +32,7 @@ ext {
 
 dependencies {
 	runtime('com.h2database:h2')
+	compile('org.springframework.boot:spring-boot-starter-actuator')
 	compile('org.springframework.boot:spring-boot-starter-thymeleaf')
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compileOnly('org.projectlombok:lombok')
@@ -46,6 +47,11 @@ dependencies {
 	compile 'org.json:json:20160810'
 	testCompile('org.springframework.security:spring-security-test')
 	compile('org.springframework.cloud:spring-cloud-starter-feign')
+	compile 'org.languagetool:language-en:4.2'
+	compile('org.springframework.retry:spring-retry')
+	compile('org.springframework.cloud:spring-cloud-starter-hystrix')
+	compile('org.springframework.cloud:spring-cloud-starter-hystrix-dashboard')
+
 
 
 }

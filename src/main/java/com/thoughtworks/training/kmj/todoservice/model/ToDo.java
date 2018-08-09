@@ -50,5 +50,5 @@ public class ToDo {
 //    @JoinColumn(name = "user_id")
 ////    @JsonIgnore
 //    private User user;
-
+     private String  suggestion;
 }

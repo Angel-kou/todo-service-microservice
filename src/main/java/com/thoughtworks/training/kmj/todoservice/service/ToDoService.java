@@ -4,6 +4,7 @@ import com.thoughtworks.training.kmj.todoservice.dto.User;
 import com.thoughtworks.training.kmj.todoservice.model.ToDo;
 import com.thoughtworks.training.kmj.todoservice.repository.ToDoRepository;
 import com.thoughtworks.training.kmj.todoservice.security.TodoAuthFilter;
+import com.thoughtworks.training.kmj.todoservice.spellcheck.SpellCheckService;
 import com.thoughtworks.training.kmj.todoservice.utils.Constants;
 import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -23,11 +24,13 @@ public class ToDoService {
     @Autowired
     private ToDoRepository toDoRepository;
 
+    @Autowired
+    private SpellCheckService  spellCheckService;
 
-     public List<ToDo> getList() {
+    public List<ToDo> getList() {
          User user = TodoAuthFilter.getUser();
          List<ToDo> list = toDoRepository.findAllByUserIdIs(user.getId());
-        return list;
+         return spellCheckService.check(list);
     }
 
 
