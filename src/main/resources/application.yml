@@ -8,8 +8,12 @@
 #      discovery:
 #        instance-id: ${spring.application.name}:${random.int}
 
+#  context-path: /api    ------>        /users
+#  prefix: /api       ------->   /api/users
+
 server:
-  port: 8080
+  port: 9001
+
 
 user-service:
   ribbon:
@@ -48,7 +52,8 @@ zuul:
          org:
            springframework:
              cloud:
-               netflix: TRACE
+               netflix: INFO
+
 
 
 

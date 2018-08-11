@@ -37,52 +37,54 @@ public class TodoAuthFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+        try{
+            String token = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-        if (!StringUtils.isEmpty(token)) {
+            if (!StringUtils.isEmpty(token)) {
 
-            Claims claims = JwtAuthentication.validateToken(token);
-            Integer id = JwtAuthentication.getUserId(claims);
+                Claims claims = JwtAuthentication.validateToken(token);
+                Integer id = JwtAuthentication.getUserId(claims);
 
-            User user = userClient.verifyTokenIsValid(id);
+                User user = userClient.verifyTokenIsValid(id);
 
-            SecurityContextHolder.getContext().setAuthentication(
-                    new UsernamePasswordAuthenticationToken(user,null,
-                            ImmutableList.of(new SimpleGrantedAuthority("dev"),
-                                    new SimpleGrantedAuthority("play")))
-            );
+                SecurityContextHolder.getContext().setAuthentication(
+                        new UsernamePasswordAuthenticationToken(user,null,
+                                ImmutableList.of(new SimpleGrantedAuthority("dev"),
+                                        new SimpleGrantedAuthority("play")))
+                );
 
-            RequestContext.getCurrentContext()
-                    .addZuulRequestHeader(HttpHeaders.AUTHORIZATION,user.getId()+":"+user.getName());
-        }
-        else {
-
-            System.out.println("------request.getServletPath()-------" + request.getServletPath());
-            if(request.getServletPath().equals("/api/login")) {
-                System.out.println("-------------kmj");
-                String json = HttpServletRequestReader.ReadAsChars(request);
-                ObjectMapper objectMapper = new ObjectMapper();
-                User user = objectMapper.readValue(json, User.class);
-
-                User temp  = userClient.verifyUserIsExist(user);
-
-
-                String backToken = "";
-                if(temp.getId() != 0) {
-
-                    backToken = JwtAuthentication.generateToken(temp.getId());
-                    response.getOutputStream().print(backToken);
-
-                }else{
-                    response.getOutputStream().print("user is not exist");
-                }
-
-                return;
+                RequestContext.getCurrentContext()
+                        .addZuulRequestHeader(HttpHeaders.AUTHORIZATION,user.getId()+":"+user.getName());
             }
+            else {
+
+                if(request.getServletPath().equals("/api/login")) {
+                    String json = HttpServletRequestReader.ReadAsChars(request);
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    User user = objectMapper.readValue(json, User.class);
+
+                    User temp  = userClient.verifyUserIsExist(user);
+
+
+                    String backToken = "";
+                    if(temp.getId() != 0) {
+
+                        backToken = JwtAuthentication.generateToken(temp.getId());
+                        response.getOutputStream().print(backToken);
+
+                    }else{
+                        response.getOutputStream().print("user is not exist");
+                    }
+
+                    return;
+                }
+            }
+
+        }catch (RuntimeException e) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, String.format("authentication failed: %s", e.getMessage()));
+            //return;
         }
-
         filterChain.doFilter(request,response);
-
     }
 
 
