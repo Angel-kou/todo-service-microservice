@@ -20,13 +20,14 @@ public class UserService {
     UserRepository userRepository;
 
     public ResponseEntity create(User user) {
+
         Optional<User> user1 = userRepository.findOneByName(user.getName());
         if (user1.isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(Constants.USERNAME_CONFLICT);
         }
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        String encodedPassword = encoder.encode("password");
+        String encodedPassword = encoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
 //        user.setCreated_date(Instant.now());
         userRepository.save(user);
@@ -40,9 +41,11 @@ public class UserService {
     }
 
     public boolean verify(String username, String password) {
+
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         return userRepository.findOneByName(username)
                 .map(User::getPassword)
-                .filter(password::equals)
+                .filter(pwd -> encoder.matches(password, pwd))
                 .isPresent();
     }
 
@@ -64,6 +67,7 @@ public class UserService {
 
     public User login(User user) {
         User user1 = new User();
+        System.out.println("userq--old----" + user.getPassword());
         if (verify(user.getName(), user.getPassword())) {
             user1.setId(findIdByName(user.getName()));
             return user1;

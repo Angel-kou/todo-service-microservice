@@ -1,6 +1,5 @@
 package com.thoughtworks.training.kmj.userservice.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +10,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.time.Instant;
 
 @Data
 @AllArgsConstructor
@@ -34,7 +32,7 @@ public class User {
 //    @JoinColumn(name = "user_id")
 //    private List<ToDo> toDos;
 
-    @JsonFormat(shape = JsonFormat.Shape.NUMBER_INT)
+//    @JsonFormat(shape = JsonFormat.Shape.NUMBER_INT)
 //    @JoinColumn(name = "created_date")
-    private Instant created_date;
+//    private Date created_date;
 }

@@ -34,13 +34,12 @@ public class UserAuthFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
         String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-        System.out.println("token --user----" + token);
-        if(!StringUtils.isEmpty(token)) {
+        if (!StringUtils.isEmpty(token)) {
             String[] splitToken = token.split(":");
             Integer userId = Integer.valueOf(splitToken[0]);
             String username = splitToken[1];
 
-            User user = new User(userId, username, "", null);
+            User user = new User(userId, username, "");
             SecurityContextHolder.getContext().setAuthentication(
                     new UsernamePasswordAuthenticationToken(user, null,
                             ImmutableList.of(new SimpleGrantedAuthority("dev"),
@@ -48,7 +47,7 @@ public class UserAuthFilter extends OncePerRequestFilter {
             );
         }
 
-        filterChain.doFilter(request,response);
+        filterChain.doFilter(request, response);
 
     }
 

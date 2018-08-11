@@ -11,9 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.time.Instant;
-import java.util.Date;
-
 @DataJpaTest
 @RunWith(SpringRunner.class)
 public class TimeTest {
@@ -27,17 +24,9 @@ public class TimeTest {
                 .id(1)
                 .name("kmj")
                 .password("123456")
-                .created_date(Instant.now())
                 .build();
-
-        System.out.println(Date.from(Instant.now()));
-//        System.out.println(Instant.now().atZone(ZoneId.of("Asia/Shanghai")).toLocalDate());
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        objectMapper.findAndRegisterModules();
-//        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS,true);
-
-        objectMapper.configure(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS,false);
-        objectMapper.configure(DeserializationFeature.READ_DATE_TIMESTAMPS_AS_NANOSECONDS,false);
+        objectMapper.configure(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS, false);
+        objectMapper.configure(DeserializationFeature.READ_DATE_TIMESTAMPS_AS_NANOSECONDS, false);
         String jsonStr = objectMapper.writeValueAsString(user);
 
         System.out.println(jsonStr);

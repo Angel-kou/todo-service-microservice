@@ -26,11 +26,11 @@ public class UserRepositoryTest {
     @Test
     public void shouldReturnUserWithName() {
 
-        System.out.println("now "+ Instant.now());
+        System.out.println("now " + Instant.now());
 
-        userRepository.save(new User(4,"user4","123",null));
+        userRepository.save(new User(4, "user4", "123"));
         Optional<User> user = userRepository.findOneByName("user4");
         assertTrue(user.isPresent());
-        assertThat(user.get().getName(),is("user4"));
+        assertThat(user.get().getName(), is("user4"));
     }
 }
