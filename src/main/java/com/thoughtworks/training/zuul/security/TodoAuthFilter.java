@@ -65,16 +65,8 @@ public class TodoAuthFilter extends OncePerRequestFilter {
 
                     User temp  = userClient.verifyUserIsExist(user);
 
-
-                    String backToken = "";
-                    if(temp.getId() != 0) {
-
-                        backToken = JwtAuthentication.generateToken(temp.getId());
-                        response.getOutputStream().print(backToken);
-
-                    }else{
-                        response.getOutputStream().print("user is not exist");
-                    }
+                    String backToken = JwtAuthentication.generateToken(temp.getId());
+                    response.getOutputStream().write(backToken.getBytes());
 
                     return;
                 }
