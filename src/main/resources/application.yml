@@ -12,7 +12,7 @@
 #  prefix: /api       ------->   /api/users
 
 server:
-  port: 9001
+  port: 8080
 
 
 user-service:
