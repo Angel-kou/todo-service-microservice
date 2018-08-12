@@ -1,11 +1,13 @@
 package com.thoughtworks.training.kmj.userservice.service;
 
+import com.thoughtworks.training.kmj.userservice.exception.NotFoundException;
 import com.thoughtworks.training.kmj.userservice.model.User;
 import com.thoughtworks.training.kmj.userservice.repository.UserRepository;
 import com.thoughtworks.training.kmj.userservice.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,9 @@ public class UserService {
 
     @Autowired
     UserRepository userRepository;
+
+
+    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     public ResponseEntity create(User user) {
 
@@ -40,14 +45,14 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public boolean verify(String username, String password) {
-
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        return userRepository.findOneByName(username)
-                .map(User::getPassword)
-                .filter(pwd -> encoder.matches(password, pwd))
-                .isPresent();
-    }
+//    public boolean verify(String username, String password) {
+//
+//        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+//        return userRepository.findOneByName(username)
+//                .map(User::getPassword)
+//                .filter(pwd -> encoder.matches(password, pwd))
+//                .isPresent();
+//    }
 
 
     public int findIdByName(String username) {
@@ -66,13 +71,25 @@ public class UserService {
 
 
     public User login(User user) {
-        User user1 = new User();
-        System.out.println("userq--old----" + user.getPassword());
-        if (verify(user.getName(), user.getPassword())) {
-            user1.setId(findIdByName(user.getName()));
-            return user1;
+//        if (!verify(user.getName(), user.getPassword())){
+//            throw new NotFoundException();
+//        }
+        User user1 = findByUserName(user.getName());
+        if (!encoder.matches(user.getPassword(), user1.getPassword())) {
+//            System.out.println("-----password--------error");
+            throw new BadCredentialsException(String.format("wrong password"));
         }
-        return user1;
+        User user2 = new User();
+        user2.setId(findIdByName(user.getName()));
+        return user2;
+
+    }
+
+
+    public User findByUserName(String userName) {
+//        System.out.println("user not found--------------");
+        return userRepository.findOneByName(userName)
+                .orElseThrow(NotFoundException::new);
     }
 
     public User findUser(int id) {
