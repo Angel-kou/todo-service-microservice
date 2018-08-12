@@ -34,7 +34,6 @@ public class ToDoService {
     }
 
 
-
     public ResponseEntity create(ToDo todo) {
 //        todo.getTasks().forEach(task -> task.setToDo(todo));
         User user = TodoAuthFilter.getUser();
