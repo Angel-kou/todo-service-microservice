@@ -4,5 +4,5 @@ spring:
   cloud:
     config:
       fail-fast: true
-      uri: http://localhost:8099/
+      uri: http://config-server:8099/
       label: todo-service
