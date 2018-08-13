@@ -1,58 +1,58 @@
-#spring:
-#  application:
-#    name: zuul
-#  cloud:
-#    consul:
-#      host: consul
-#      port: 8500
-#      discovery:
-#        instance-id: ${spring.application.name}:${random.int}
-
-#  context-path: /api    ------>        /users
-#  prefix: /api       ------->   /api/users
-
-server:
-  port: 8080
-
-
-user-service:
-  ribbon:
-    listOfServers: localhost:8081
-
-todo-service:
-  ribbon:
-    listOfServers: localhost:8082
-
-zuul:
-  debug:
-     request: true
-  sensitive-headers:
-  prefix: /api
-  routes:
-    user:
-      path: /users/**
-      serviceId: user-service
-      strip-prefix: false
-    verification:
-      path: /verification
-      serviceId: user-service
-      strip-prefix: false
-    login:
-      path: /login/**
-      serviceId: user-service
-      strip-prefix: false
-
-    todos:
-      path: /todos/**
-      serviceId: todo-service
-      strip-prefix: false
-
-    logging:
-       level:
-         org:
-           springframework:
-             cloud:
-               netflix: INFO
+##spring:
+##  application:
+##    name: zuul
+##  cloud:
+##    consul:
+##      host: consul
+##      port: 8500
+##      discovery:
+##        instance-id: ${spring.application.name}:${random.int}
+#
+##  context-path: /api    ------>        /users
+##  prefix: /api       ------->   /api/users
+#
+#server:
+#  port: 8080
+#
+#
+#user-service:
+#  ribbon:
+#    listOfServers: user-service:8081
+#
+#todo-service:
+#  ribbon:
+#    listOfServers: todo-service:8082
+#
+#zuul:
+#  debug:
+#     request: true
+#  sensitive-headers:
+#  prefix: /api
+#  routes:
+#    user:
+#      path: /users/**
+#      serviceId: user-service
+#      strip-prefix: false
+#    verification:
+#      path: /verification
+#      serviceId: user-service
+#      strip-prefix: false
+#    login:
+#      path: /login/**
+#      serviceId: user-service
+#      strip-prefix: false
+#
+#    todos:
+#      path: /todos/**
+#      serviceId: todo-service
+#      strip-prefix: false
+#
+#    logging:
+#       level:
+#         org:
+#           springframework:
+#             cloud:
+#               netflix: INFO
 
 
 

@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: zuul
+  cloud:
+    config:
+      fail-fast: true
+      uri: http://config-server:8099/
+      label: master
+
+
