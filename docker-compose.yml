@@ -1,0 +1,82 @@
+version: "3"
+
+networks:
+  todo:
+
+services:
+
+  mysql:
+    image: coney/mysql:5
+    deploy:
+      replicas: 1
+      restart_policy:
+        delay: 10s
+    networks:
+      todo:
+        aliases:
+        - mysql
+    ports:
+        - "3306:3306"
+
+
+  config-server:
+      image: kmj/config-server:1
+      deploy:
+        replicas: 1
+        restart_policy:
+          delay: 10s
+      depends_on:
+        - mysql
+      networks:
+        todo:
+          aliases:
+          - config-server
+      ports:
+      - "8099:8099"
+
+
+  zuul:
+     image: kmj/zuul:1
+     deploy:
+       replicas: 1
+       restart_policy:
+         delay: 10s
+     networks:
+       todo:
+         aliases:
+         - zuul
+     ports:
+         - "8080:8080"
+
+
+  user-service:
+      image: kmj/user-service:1
+      deploy:
+        replicas: 1
+        restart_policy:
+          delay: 10s
+      depends_on:
+      - mysql
+      - config-server
+      networks:
+        todo:
+          aliases:
+          - user-service
+      ports:
+      - "8081:8081"
+
+  todo-service:
+     image: kmj/todo-service:1
+     deploy:
+       replicas: 1
+       restart_policy:
+         delay: 10s
+     depends_on:
+     - mysql
+     - config-server
+     networks:
+       todo:
+         aliases:
+         - todo-service
+     ports:
+     - "8082:8082"
